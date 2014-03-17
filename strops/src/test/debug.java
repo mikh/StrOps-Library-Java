@@ -9,6 +9,7 @@ public class debug {
 		
 	//	System.out.println("abababababavvabababababavvababababbababvvababbbaabavvabababvvaa");
 	//	System.out.println(StrOps.replaceAll("abababababavvabababababavvababababbababvvababbbaabavvabababvvaa","vv","xx"));
-		StrOps.splitOnUppercaseLetters("C:\\Users\\Mikhail\\Desktop\\Dropbox\\EC504 Grading\\Submissions\\HomeworkOne\\names.txt", "C:\\Users\\Mikhail\\Desktop\\Dropbox\\EC504 Grading\\Submissions\\HomeworkOne\\names.split.txt");
+	//	StrOps.splitOnUppercaseLetters("C:\\Users\\Mikhail\\Desktop\\Dropbox\\EC504 Grading\\Submissions\\HomeworkOne\\names.txt", "C:\\Users\\Mikhail\\Desktop\\Dropbox\\EC504 Grading\\Submissions\\HomeworkOne\\names.split.txt");
+		StrOps.splitOnUppercaseLetters("C:\\Users\\Mikhail\\Downloads\\hw2_results\\hw2_results_time\\names.txt", "C:\\Users\\Mikhail\\Downloads\\hw2_results\\hw2_results_time\\names.split.txt");
 	}
 }
