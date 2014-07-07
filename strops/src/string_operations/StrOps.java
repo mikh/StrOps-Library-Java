@@ -9,6 +9,50 @@ import java.util.ArrayList;
 
 public class StrOps {
 
+	public static String getNextSection(String str, ArrayList<String> opening_sequences, ArrayList<String> closing_sequences, int start_index){
+		//first find opening sequence
+		String section = null;
+		int open = -1, ii, s_index, e_index = -1;
+		for(ii = start_index; ii < str.length(); ii++){
+			for(int jj = 0; jj < opening_sequences.size(); jj++){
+				if(opening_sequences.get(jj).length() <= str.length() - ii){
+					String substr = str.substring(ii, ii + opening_sequences.get(jj).length());
+					if(substr.equals(opening_sequences.get(jj))){
+						open = jj;
+						break;
+					}
+				}
+			}
+			if(open != -1)
+				break;
+		}
+		
+		//look for end sequence
+		if(open != -1){
+			s_index = ii;
+			ii += opening_sequences.get(open).length();
+			for(; ii < str.length(); ii++){
+				String opening = opening_sequences.get(open);
+				for(int jj = 0; jj < opening_sequences.size(); jj++){
+					if(opening_sequences.get(jj).equals(opening)){
+						if(closing_sequences.get(jj).length() <= str.length() - ii){
+							String substr = str.substring(ii, ii + closing_sequences.get(jj).length());
+							if(substr.equals(closing_sequences.get(jj))){
+								e_index = ii + substr.length();
+								break;
+							}
+						}
+					}
+				}
+				if(e_index != -1)
+					break;
+			}
+			if(e_index != -1)
+				section = str.substring(s_index, e_index);
+		}
+		
+		return section;
+	}
 	
 	public static String getDilineatedSubstring(String str, String pattern, int instance, boolean back){		ArrayList<String> substring_list = new ArrayList<String>();
 		if(str.length() < pattern.length() || instance < 0){
@@ -139,6 +183,15 @@ public class StrOps {
 	
 	public static int findPattern(String str, String pattern){
 		for(int ii = 0; ii <= (str.length() - pattern.length()); ii++){
+			String substr = str.substring(ii, ii+pattern.length());
+			if(pattern.equals(substr))
+				return ii;
+		}
+		return -1;
+	}
+	
+	public static int findPatternAfterIndex(String str, String pattern, int index){
+		for(int ii = index; ii <= (str.length() - pattern.length()); ii++){
 			String substr = str.substring(ii, ii+pattern.length());
 			if(pattern.equals(substr))
 				return ii;
