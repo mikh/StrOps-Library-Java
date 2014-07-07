@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class StrOps {
 
+	//has an error issue if the sections contain each other's opening/closing sequences
 	public static String getNextSection(String str, ArrayList<String> opening_sequences, ArrayList<String> closing_sequences, int start_index){
 		//first find opening sequence
 		String section = null;
@@ -52,6 +53,51 @@ public class StrOps {
 		}
 		
 		return section;
+	}
+
+	//breaks a string on sequences matching 'pattern', but ignores 'pattern' if it is within a section.
+	//assumes each opening tag has only one closing tag
+	public static ArrayList<String> getAllTextBetweenPatternsIgnoringSections(String str, String pattern, ArrayList<String> opening_sequences, ArrayList<String>closing_sequences){
+		ArrayList<String> mapping = new ArrayList<String>();
+		String rewriteString = "";
+		for(int ii = 0; ii < str.length(); ii++){
+			boolean found = false;
+			for(int jj = 0; jj < opening_sequences.size(); jj++){
+				String substr = str.substring(ii, ii + opening_sequences.get(jj).length());
+				if(substr.equals(opening_sequences.get(jj))){
+					int second_index = findPatternAfterIndex(str, closing_sequences.get(jj), ii + opening_sequences.size());
+					if(second_index != -1){
+						found = true;
+						String trans = str.substring(ii, second_index + substr.length());
+						mapping.add(trans);
+						rewriteString += String.format("\"$%d$\"",mapping.size()-1);
+						ii = second_index + substr.length();
+					}
+				}
+			}
+			if(!found)
+				rewriteString += str.charAt(ii);
+		}
+
+		ArrayList<String> output = new ArrayList<String>();
+		int index = 0;
+		for(int ii = 0; ii < rewriteString.length(); ii++){
+			String substr = rewriteString.substring(ii, ii + pattern.length());
+			if(substr.equals(pattern)){
+				output.add(rewriteString.substring(index, ii));
+				index = ii + pattern.length();
+			}
+		}
+		if(index < rewriteString.length())
+			output.add(rewriteString.substring(index));
+
+		for(int ii = 0; ii < output.size(); ii++){
+			for(int jj = 0; jj < mapping.size(); jj++){
+				output.set(ii, output.get(ii).replace(String.format("\"$%d$\"", jj), mapping.get(jj)));
+			}
+		}
+		return output;
+
 	}
 	
 	public static String getDilineatedSubstring(String str, String pattern, int instance, boolean back){		ArrayList<String> substring_list = new ArrayList<String>();
