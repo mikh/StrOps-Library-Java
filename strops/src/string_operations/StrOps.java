@@ -63,15 +63,17 @@ public class StrOps {
 		for(int ii = 0; ii < str.length(); ii++){
 			boolean found = false;
 			for(int jj = 0; jj < opening_sequences.size(); jj++){
-				String substr = str.substring(ii, ii + opening_sequences.get(jj).length());
-				if(substr.equals(opening_sequences.get(jj))){
-					int second_index = findPatternAfterIndex(str, closing_sequences.get(jj), ii + opening_sequences.size());
-					if(second_index != -1){
-						found = true;
-						String trans = str.substring(ii, second_index + substr.length());
-						mapping.add(trans);
-						rewriteString += String.format("\"$%d$\"",mapping.size()-1);
-						ii = second_index + substr.length();
+				if(opening_sequences.get(jj).length() <= str.length() - ii){
+					String substr = str.substring(ii, ii + opening_sequences.get(jj).length());
+					if(substr.equals(opening_sequences.get(jj))){
+						int second_index = findPatternAfterIndex(str, closing_sequences.get(jj), ii + opening_sequences.get(jj).length());
+						if(second_index != -1){
+							found = true;
+							String trans = str.substring(ii, second_index + substr.length());
+							mapping.add(trans);
+							rewriteString += String.format("\"$%d$\"",mapping.size()-1);
+							ii = second_index;
+						}
 					}
 				}
 			}
@@ -81,7 +83,7 @@ public class StrOps {
 
 		ArrayList<String> output = new ArrayList<String>();
 		int index = 0;
-		for(int ii = 0; ii < rewriteString.length(); ii++){
+		for(int ii = 0; ii <= rewriteString.length() - pattern.length(); ii++){
 			String substr = rewriteString.substring(ii, ii + pattern.length());
 			if(substr.equals(pattern)){
 				output.add(rewriteString.substring(index, ii));
