@@ -298,4 +298,9 @@ public class StrOps {
 			System.out.println("[ERROR] cantrip.string_operations.StrOps:: Cannot split on uppercase letters from " + file_location + " and put into " + destination_file);
 		}
 	}
+	
+	public static void printArrayList(ArrayList<String> list){
+		for(int ii = 0; ii < list.size(); ii++)
+			System.out.println(list.get(ii));
+	}
 }
