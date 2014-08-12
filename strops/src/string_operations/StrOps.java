@@ -246,6 +246,46 @@ public class StrOps {
 		}
 		return -1;
 	}
+	
+	/**
+	 * Similar to findPatternAfterIndex but it doesn't trigger if the pattern has been escaped with \ or is within quotes
+	 * @param str - original string
+	 * @param pattern - pattern to find
+	 * @param index - starting index
+	 * @return index of first pattern found or -1
+	 */
+	public static int findNonDelimitedPatternAfterIndex(String str, String pattern, int index){
+		boolean single_quotes = false, double_quotes = false, delimited = false;
+		for(int ii = index; ii <= (str.length() - pattern.length()); ii++){
+			if((str.charAt(ii) == '\'') && !double_quotes && !delimited){
+				if(!single_quotes) 
+					single_quotes = true;
+				else
+					single_quotes = false;
+			} else if((str.charAt(ii) == '\"') && !single_quotes && !delimited){
+				if(!double_quotes)
+					double_quotes = true;
+				else
+					double_quotes = false;
+			}
+			else if(str.charAt(ii) == '\\'){
+				if(delimited)
+					delimited = false;
+				else
+					delimited = true;
+			}
+			
+			if(!single_quotes && !double_quotes && !delimited){
+				String substr = str.substring(ii, ii + pattern.length());
+				if(pattern.equals(substr))
+					return ii;
+			}
+			
+			if(delimited && str.charAt(ii) != '\\')
+				delimited = false;
+		}
+		return -1;
+	}
 
 	public static ArrayList<Integer> findAllMatches(String str, String pattern){
 		ArrayList<Integer> locus = new ArrayList<Integer>();
