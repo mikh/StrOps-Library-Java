@@ -286,13 +286,33 @@ public class StrOps {
 		}
 		return -1;
 	}
+	
+	/**
+	 * Trims the input string and removes " or ' quotes if they exist
+	 * @param s - input string
+	 * @return - string with outer quotes removed
+	 */
+	public static String removeQuotes(String s){
+		s = s.trim();
+		if(s.length() > 0){
+			char c = s.charAt(s.length()-1);
+			if(c == '\'' || c == '\"')
+				s = s.substring(0, s.length()-1);
+		}
+		if(s.length() > 0){
+			char c = s.charAt(0);
+			if(c == '\'' || c == '\"')
+				s = s.substring(1);
+		}
+		return s;
+	}
 
 	public static ArrayList<Integer> findAllMatches(String str, String pattern){
 		ArrayList<Integer> locus = new ArrayList<Integer>();
 		for(int ii = 0; ii < str.length() - pattern.length() + 1; ii++){
 			String word = str.substring(ii,ii+pattern.length());
 			if(pattern.equals(word))
-				locus.add(ii);			
+				locus.add(ii);			 	
 		}
 		return locus;
 	}
